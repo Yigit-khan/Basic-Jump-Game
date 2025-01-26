@@ -14,6 +14,7 @@ public class PlayerMovement : MonoBehaviour
 
     private float moveX;
     private bool canJump = true;
+    private float highestY = 0f;
 
     void Awake()
     {
@@ -48,6 +49,13 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             jumpForce = 10f * jumpForceMultipliers[0];
+        }
+
+        // Update the score based on the player's height
+        if (transform.position.y > highestY)
+        {
+            highestY = transform.position.y;
+            ScoreManager.instance.AddScore(1);
         }
     }
 
@@ -103,6 +111,7 @@ public class PlayerMovement : MonoBehaviour
         if (collision.gameObject.GetComponent<DeadLine>() != null)
         {
             Destroy(gameObject);
+            FindObjectOfType<UIManager>().ShowGameOver();
         }
     }
 }
